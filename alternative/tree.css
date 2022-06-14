@@ -1,0 +1,10 @@
+u1-tree {
+    display:block;
+}
+u1-tree ul {
+    list-style:none;
+}
+u1-tree li:not([aria-expanded=true]) > ul {
+    display: none;
+    content-visibility: hidden;
+}

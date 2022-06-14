@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html lang=en>
+<head>
+    <meta charset="utf-8">
+    <meta name=viewport content="width=device-width">
+    <script src="../../u1/tests/test-init.js" type=module></script>
+
+    <script src="../tree.js" type=module></script>
+    <link rel=stylesheet href="../tree.css">
+
+<body>
+
+<section>
+
+    <u1-tree1 aria-expanded=true>root
+        <u1-tree1 aria-expanded=true>Folder 1
+            <u1-tree1>File 1.1</u1-tree1>
+            <u1-tree1>File 1.2</u1-tree1>
+        </u1-tree1>
+        <u1-tree1>Folder 3
+            <u1-tree1>File 3.1</u1-tree1>
+            <u1-tree1>File 3.2</u1-tree1>
+        </u1-tree1>
+    </u1-tree1>
+
+</section>
+
+
+<style>
+    u1-tree1::part(row):hover {
+        background:#00000004;
+    }
+    u1-tree1[aria-selected=true]::part(row) {
+        background:#00000008;
+    }
+    u1-tree1::part(row):focus {
+        outline:1px dotted;
+    }
+</style>

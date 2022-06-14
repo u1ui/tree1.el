@@ -1,0 +1,46 @@
+{
+    "schemaVersion": "1.0.0",
+    "readme": "README.md",
+    "modules": [
+        {
+            "kind": "javascript-module",
+            "path": "tree.js",
+            "declarations": [
+                {
+                    "kind": "class",
+                    "description": "",
+                    "name": "tree",
+                    "todo_members": [
+                        {
+                            "kind": "property",
+                            "name": "select"
+                        }
+                    ],
+                    "todo_events": [
+                        {
+                            "name": "u1-tree-show",
+                            "type": {
+                                "text": "Event"
+                            }
+                        }
+                    ],
+                    "attributes": [
+                    ],
+                    "superclass": { "name": "HTMLElement" },
+                    "tagName": "u1-tree",
+                    "customElement": true
+                }
+            ],
+            "exports": [
+                {
+                    "kind": "custom-element-definition",
+                    "name": "u1-tree",
+                    "declaration": {
+                        "name": "tree",
+                        "module": "tree.js"
+                    }
+                }
+            ]
+        }
+    ]
+}

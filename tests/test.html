@@ -1,0 +1,109 @@
+<!DOCTYPE HTML>
+<html lang=en>
+<head>
+    <meta charset="utf-8">
+    <meta name=viewport content="width=device-width">
+    <script src="../../u1/tests/test-init.js" type=module></script>
+    <script src="../../u1/auto.js" type=module></script>
+    <title>Test</title>
+
+    <link rel=stylesheet href="https://cdn.jsdelivr.net/gh/u1ui/base.css/full.css">
+    <link rel=stylesheet href="https://cdn.jsdelivr.net/gh/u1ui/classless.css/variables.min.css">
+    <link rel=stylesheet href="https://cdn.jsdelivr.net/gh/u1ui/classless.css/classless.min.css">
+    <link rel=stylesheet href="https://cdn.jsdelivr.net/gh/u1ui/classless.css/more.min.css">
+    <link rel=stylesheet href="https://cdn.jsdelivr.net/gh/u1ui/classless.css/aria.min.css">
+    <link rel=stylesheet href="https://cdn.jsdelivr.net/gh/u1ui/classless.css/simple.min.css">
+
+    <style>
+        body {
+            place-content: initial;
+            --u1-ico-dir:'https://cdn.jsdelivr.net/npm/@material-icons/svg@1.0.11/svg/{icon}/baseline.svg';
+        }
+    </style>
+
+
+    <script src="../tree.js" type=module></script>
+    <link rel=stylesheet href="../tree.css">
+
+<body>
+
+<section>
+
+    <u1-tree1 aria-expanded=true>root
+        <u1-tree1 aria-expanded=true>Folder 1
+            <u1-tree1 draggable=true>File 1.1</u1-tree1>
+            <u1-tree1>File 1.2</u1-tree1>
+        </u1-tree1>
+        <u1-tree1 aria-expanded=true droppable>Folder 2
+            <u1-tree1>File 2.1</u1-tree1>
+            <u1-tree1>Folder 2.2
+                <u1-tree1>
+                    <span slot=icon><u1-ico icon=home>x</u1-ico></span>
+                    Home
+                </u1-tree1>
+                <u1-tree1>
+                    <span slot=icon><u1-ico icon=star>x</u1-ico></span>
+                    Star
+                </u1-tree1>
+                <u1-tree1>
+                    <span slot=icon><u1-ico icon=search>x</u1-ico></span>
+                    Search
+                </u1-tree1>
+                <u1-tree1>
+                    <span slot=icon><u1-ico icon=accessible>x</u1-ico></span>
+                    Accessible
+                </u1-tree1>
+                <u1-tree1>
+                    <span slot=icon><u1-ico icon=alarm>x</u1-ico></span>
+                    <u1-tooltip tabindex=-1 style="padding:0">
+                        <table>
+                            <tr>
+                                <td>ID:
+                                <td>22
+                            <tr>
+                                <td>Module:
+                                <td>cms.cont.text
+                            <tr>
+                                <td>Name:
+                                <td>Text
+                        </table>
+                    </u1-tooltip>
+                    Alarm
+                </u1-tree1>
+            </u1-tree1>
+        </u1-tree1>
+        <u1-tree1 droppable>Folder 3
+            <u1-tree1>
+                <label>
+                    <input type=checkbox style="vertical-align:-.1em">
+                    File 3.1
+                </label>
+            </u1-tree1>
+            <u1-tree1>
+                <label>
+                    <input value="File 3.2">
+                </label>
+            </u1-tree1>
+        </u1-tree1>
+    </u1-tree1>
+
+
+    <style>
+    u1-tree1::part(row) {
+        border-radius:.3rem;
+    }
+    u1-tree1:focus::part(row) {
+        outline:.1rem solid var(--color);
+        background:transparent;
+    }
+    u1-tree1[aria-selected=true]::part(row) {
+        background:transparent;
+        background:#00000008;
+        xfont-weight:bold;
+    }
+    u1-tree1::part(row):hover {
+        background:#00000004;
+    }
+    </style>
+
+</section>

@@ -1,0 +1,88 @@
+<!DOCTYPE HTML>
+<html lang=en>
+<head>
+    <meta charset="utf-8">
+    <meta name=viewport content="width=device-width">
+    <script src="../../u1/tests/test-init.js" type=module></script>
+    <script src="../../u1/auto.js" type=module></script>
+    <title>Test</title>
+
+    <link rel=stylesheet href="https://cdn.jsdelivr.net/gh/u1ui/base.css/full.css">
+    <link rel=stylesheet href="https://cdn.jsdelivr.net/gh/u1ui/classless.css/variables.min.css">
+    <link rel=stylesheet href="https://cdn.jsdelivr.net/gh/u1ui/classless.css/classless.min.css">
+    <link rel=stylesheet href="https://cdn.jsdelivr.net/gh/u1ui/classless.css/more.min.css">
+    <link rel=stylesheet href="https://cdn.jsdelivr.net/gh/u1ui/classless.css/aria.min.css">
+    <link rel=stylesheet href="https://cdn.jsdelivr.net/gh/u1ui/classless.css/simple.min.css">
+
+    <style>
+        body {
+            place-content: initial;
+            --u1-ico-dir:'https://cdn.jsdelivr.net/npm/@material-icons/svg@1.0.11/svg/{icon}/baseline.svg';
+        }
+    </style>
+
+
+    <script src="./tree.js" type=module></script>
+    <link rel=stylesheet href="./tree.css">
+
+<body>
+
+<section>
+
+    <u1-tree>
+        <ul>
+            <li aria-expanded="true">Folder 1
+                <ul>
+                    <li draggable=true>File 1.1
+                    <li>File 1.2
+                </ul>
+            <li aria-expanded="true">Folder 2
+                <ul droppable>
+                    <li>File 2.1
+                    <li>Filder 2.2
+                        <ul>
+                            <li>File 2.2.1
+                            <li>File 2.2.2
+                        </ul>
+                </ul>
+            <li>Folder 3
+                <ul droppable>
+                    <li>File 3.1
+                    <li>File 3.2
+                </ul>
+        </ul>
+    </u1-tree>
+
+    <style>
+        u1-tree .focus {
+            xoutline: 1px solid red !important;
+        }
+        u1-tree [role="group"] {
+            font-weight:normal;
+            color:black;
+        }
+        u1-tree :focus {
+            color:red;
+        }
+        u1-tree :focus {
+            outline:none;
+        }
+        u1-tree li[aria-selected=true] {
+            font-weight:bold;
+        }
+        u1-tree li::before {
+            content:' ';
+            white-space: pre;
+            font-family:monospace
+        }
+        u1-tree li[aria-expanded]::before {
+            content:'▸';
+        }
+        u1-tree li[aria-expanded=true]::before {
+            content:'▾';
+        }
+    </style>
+
+
+
+</section>
