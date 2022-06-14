@@ -34,11 +34,27 @@ customElements.define('u1-tree1', class extends HTMLElement {
         });
         this.addEventListener('keydown',e=>{
             if (e.target !== this) return;
+
+            let fn = {
+                ArrowUp:    ()=> this.prevFocusable()?.setFocus(),
+                ArrowDown:  ()=> this.nextFocusable()?.setFocus(),
+                ArrowRight: ()=> !this.isExpanded() ? this.toggleExpand(true) : this.nextFocusable()?.setFocus(),
+                ArrowLeft:  ()=> this.isExpanded() ? this.toggleExpand(false) : this.parentNode.setFocus?.(),
+                Enter:      ()=> this.selected = this,
+                ' ':        ()=> this.selected = this,
+            }[e.key];
+
+            if (fn) {
+                fn();
+                e.preventDefault();
+            }
+            /*
             if (e.key === 'ArrowUp')     this.prevFocusable()?.setFocus();
             if (e.key === 'ArrowDown')   this.nextFocusable()?.setFocus();
             if (e.key === 'ArrowRight') !this.isExpanded() ? this.toggleExpand(true) : this.nextFocusable()?.setFocus();
             if (e.key === 'ArrowLeft')   this.isExpanded() ? this.toggleExpand(false) : this.parentNode.setFocus?.();
             if (e.key === 'Enter' || e.key === ' ') this.selected = this;
+            */
         });
 
         this.addEventListener('mousedown',e=>{ // prevent dbl-click selection
