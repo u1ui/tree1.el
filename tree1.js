@@ -1,25 +1,25 @@
 
-
+const css = `
+[part=row] { display:flex; align-items:center; gap:.1em; outline:0; padding:.2em 0; padding-left:calc(var(--indent) * var(--level)); }
+[name=icon] { display:flex; min-width:1.7em; justify-content:center; }
+.arrow { font-weight:normal !important; }
+.arrow::after { content:'▸' }
+:host([aria-expanded=true]) .arrow::after { content:'▾' }
+:host(:not([aria-expanded])) .arrow { opacity:0; }
+`;
 
 customElements.define('u1-tree1', class extends HTMLElement {
     constructor() {
         super();
         const shadow = this.attachShadow({mode: 'open', delegatesFocus: true});
         shadow.innerHTML = `
+        <style>${css}</style>
         <div part=row tabindex=-1>
-            <span class=spacer></span>
+
             <span class=arrow></span>
             <slot name=icon>📁</slot>
             <slot></slot>
-            <style>
-            [part=row] { display:flex; align-items:center; gap:.3rem; outline:0; padding:.2rem 0; }
-            .spacer { width:calc(var(--indent) * var(--level)); }
-            [name=icon] { margin:0 .4rem; }
-            .arrow { font-weight:normal !important; }
-            .arrow::after { content:'▸' }
-            :host([aria-expanded=true]) .arrow::after { content:'▾' }
-            :host(:not([aria-expanded])) .arrow { opacity:0; }
-            </style>
+
         </div>
         <slot part=children name=children role=group></slot>`
 
@@ -48,13 +48,6 @@ customElements.define('u1-tree1', class extends HTMLElement {
                 fn();
                 e.preventDefault();
             }
-            /*
-            if (e.key === 'ArrowUp')     this.prevFocusable()?.setFocus();
-            if (e.key === 'ArrowDown')   this.nextFocusable()?.setFocus();
-            if (e.key === 'ArrowRight') !this.isExpanded() ? this.toggleExpand(true) : this.nextFocusable()?.setFocus();
-            if (e.key === 'ArrowLeft')   this.isExpanded() ? this.toggleExpand(false) : this.parentNode.setFocus?.();
-            if (e.key === 'Enter' || e.key === ' ') this.selected = this;
-            */
         });
 
         this.addEventListener('mousedown',e=>{ // prevent dbl-click selection

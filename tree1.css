@@ -1,19 +1,20 @@
 
 u1-tree1 {
-    --indent:1rem;
+    --indent:1em;
     --level:0;
     display:block;
-    /* grid experiment
+
+    /* grid experiment *
     display:grid;
     grid-template-columns: auto 1fr;
     gap:.5rem;
-    */
+    /* */
 }
-/*
+/* *
 u1-tree1 u1-tree1 {
     display:contents;
 }
-*/
+/* */
 
 u1-tree1:not([aria-expanded=true])::part(children) {
     display:none;
