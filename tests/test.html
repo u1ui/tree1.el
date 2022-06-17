@@ -30,10 +30,6 @@
 <section>
 
     <u1-tree1 aria-expanded=true>root
-        <u1-tree1 aria-expanded=true>Folder 1
-            <u1-tree1 draggable=true>File 1.1</u1-tree1>
-            <u1-tree1>File 1.2</u1-tree1>
-        </u1-tree1>
         <u1-tree1 aria-expanded=true droppable>Folder 2
             <u1-tree1>File 2.1</u1-tree1>
             <u1-tree1>Folder 2.2
@@ -72,18 +68,8 @@
                 </u1-tree1>
             </u1-tree1>
         </u1-tree1>
-        <u1-tree1 droppable>Folder 3
-            <u1-tree1>
-                <label>
-                    <input type=checkbox style="vertical-align:-.1em">
-                    File 3.1
-                </label>
-            </u1-tree1>
-            <u1-tree1>
-                <label>
-                    <input value="File 3.2">
-                </label>
-            </u1-tree1>
+        <u1-tree1 aria-expanded aria-live=off>
+            Folder 3 (dynamic)
         </u1-tree1>
     </u1-tree1>
 
@@ -99,11 +85,35 @@
     u1-tree1[aria-selected=true]::part(row) {
         background:transparent;
         background:#00000008;
-        xfont-weight:bold;
+        font-weight:bold;
     }
     u1-tree1::part(row):hover {
         background:#00000004;
     }
     </style>
+
+    <script type=module>
+        document.addEventListener('u1-tree1-expand',e=>{
+            const tree = e.target;
+            if (e.load) {
+                e.load(delaied(()=>{
+                    tree.innerHTML += '<u1-tree1><span slot=icon>🖼</span>Dynamic File 1</u1-tree1>';
+                    tree.innerHTML += '<u1-tree1><span slot=icon>📄</span>Document</u1-tree1>';
+                    tree.innerHTML += '<u1-tree1 aria-expanded aria-live=off>Folder</u1-tree1>';
+                }, 400));
+            }
+        });
+
+
+        const delaied = (fn, ms)=>{
+            return new Promise(resolve => {
+                setTimeout(()=>{
+                    fn();
+                    resolve()
+                }, ms);
+            });
+        }
+
+    </script>
 
 </section>

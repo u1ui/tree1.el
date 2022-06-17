@@ -1,11 +1,16 @@
 
 const css = `
-[part=row] { display:flex; align-items:center; gap:.1em; outline:0; padding:.2em 0; padding-left:calc(var(--indent) * var(--level)); }
-[name=icon] { display:flex; min-width:1.7em; justify-content:center; }
+[part=row] { display:flex; align-items:center; outline:0; padding:.2em 0; padding-left:calc(var(--indent) * var(--level)); }
+
 .arrow { font-weight:normal !important; }
-.arrow::after { content:'▸' }
+.arrow::after { content:'▸'; }
+.arrow::after { display:inline-block; min-width:1.1em; text-align:center; }
 :host([aria-expanded=true]) .arrow::after { content:'▾' }
 :host(:not([aria-expanded])) .arrow { opacity:0; }
+:host([aria-expanded=true][aria-busy=true]) .arrow::after { content:'⏲'; }
+
+[name=icon] { display:flex; min-width:1.7em; justify-content:center; font-weight:400; }
+
 `;
 
 customElements.define('u1-tree1', class extends HTMLElement {
@@ -30,7 +35,7 @@ customElements.define('u1-tree1', class extends HTMLElement {
             if (!getSelection()?.isCollapsed) return;
             this.toggleExpand();
             this.activeElement = this;
-            this.selected = this;
+            this._select();
         });
         this.addEventListener('keydown',e=>{
             if (e.target !== this) return;
@@ -40,8 +45,8 @@ customElements.define('u1-tree1', class extends HTMLElement {
                 ArrowDown:  ()=> this.nextFocusable()?.setFocus(),
                 ArrowRight: ()=> !this.isExpanded() ? this.toggleExpand(true) : this.nextFocusable()?.setFocus(),
                 ArrowLeft:  ()=> this.isExpanded() ? this.toggleExpand(false) : this.parentNode.setFocus?.(),
-                Enter:      ()=> this.selected = this,
-                ' ':        ()=> this.selected = this,
+                Enter:      ()=> this._select(),
+                ' ':        ()=> this._select(),
             }[e.key];
 
             if (fn) {
@@ -53,6 +58,12 @@ customElements.define('u1-tree1', class extends HTMLElement {
         this.addEventListener('mousedown',e=>{ // prevent dbl-click selection
             if (e.detail >= 2) e.preventDefault();
         });
+
+        this.childrenObserver = new MutationObserver(mutations=>{
+            this._markup();
+        }).observe(this, {childList: true});
+
+
     }
     connectedCallback() {
         this._markup();
@@ -61,12 +72,9 @@ customElements.define('u1-tree1', class extends HTMLElement {
         for (const child of this.children) {
             child.tagName === 'U1-TREE1' && child.setAttribute('slot', 'children');
         }
-        if (this.items().length === 0) {
-            this.removeAttribute('aria-expanded');
-        } else if(!this.hasAttribute('aria-expanded')) {
-            this.setAttribute('aria-expanded','false');
-        }
         this.setAttribute('role', this.root() === this ? 'tree' : 'treeitem');
+
+        if (this.items().length && !this.hasAttribute('aria-expanded')) this.setAttribute('aria-expanded', 'false');
     }
     items(){
         return this.shadowRoot.querySelector('[part=children]').assignedElements();
@@ -101,9 +109,29 @@ customElements.define('u1-tree1', class extends HTMLElement {
     isExpanded() {
         return this.getAttribute('aria-expanded') === 'true';
     }
+    isExpandable() {
+        return this.hasAttribute('aria-expanded') || this.items().length;
+    }
     toggleExpand(doit) {
+        if (!this.isExpandable()) return;
         if (doit == null) doit = !this.isExpanded();
-        this.items().length && this.setAttribute('aria-expanded', doit?'true':'false');
+
+        const event = new CustomEvent(doit?'u1-tree1-expand':'u1-tree1-collapse', {bubbles: true});
+        if (this.getAttribute('aria-live') && this.getAttribute('aria-busy') !== 'true') {
+            event.load = promise=>{
+                this.setAttribute('aria-busy','true');
+                console.log(promise)
+                promise.then(data => {
+                    this.removeAttribute('aria-live');
+                    this.removeAttribute('aria-busy');
+                }).catch(data=>{
+                    console.log('failed to load')
+                });
+            }
+        }
+        this.dispatchEvent(event);
+
+        this.setAttribute('aria-expanded', doit?'true':'false');
     }
     root(){
         return this.parentNode.tagName === 'U1-TREE1' ? this.parentNode.root() : this;
@@ -115,8 +143,13 @@ customElements.define('u1-tree1', class extends HTMLElement {
     set selected(el){
         let old = this.root()._selected;
         if (old) old.setAttribute('aria-selected', 'false');
-        el.setAttribute('aria-selected', 'true');
-        this.root()._selected = el;
+        this.setAttribute('aria-selected', 'true');
+        this.root()._selected = this;
+    }
+    _select(el){ // like selected but also fires event
+        const event = new CustomEvent('u1-tree1-select', {bubbles: true});
+        this.dispatchEvent(event);
+        this.selected = el;
     }
 
     get activeElement(){

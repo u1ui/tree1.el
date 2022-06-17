@@ -16,9 +16,21 @@
                             "name": "select"
                         }
                     ],
-                    "todo_events": [
+                    "events": [
                         {
-                            "name": "u1-tree-show",
+                            "name": "u1-tree-expand",
+                            "type": {
+                                "text": "Event"
+                            }
+                        },
+                        {
+                            "name": "u1-tree-collapse",
+                            "type": {
+                                "text": "Event"
+                            }
+                        },
+                        {
+                            "name": "u1-tree-select",
                             "type": {
                                 "text": "Event"
                             }
