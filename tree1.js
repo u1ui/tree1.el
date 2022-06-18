@@ -1,30 +1,51 @@
 
-const css = `
-[part=row] { display:flex; align-items:center; outline:0; padding:.2em 0; padding-left:calc(var(--indent) * var(--level)); }
+let css = `
 
-.arrow { font-weight:normal !important; }
+:host {
+    display:block;
+}
+:host([role=tree]) {
+    --indent:1rem;
+}
+:host(:not([aria-expanded=true])) [part=children] {
+    display:none;
+}
+
+[part=row] { display:flex; padding:.15em 0; padding-left:calc( var(--indent) * (var(--level) - 1) ); }
+
+.arrow {
+    font-weight:normal !important;
+    min-width:1.1em;
+    text-align:center;
+}
 .arrow::after { content:'▸'; }
-.arrow::after { display:inline-block; min-width:1.1em; text-align:center; }
+.arrow::after { display:inline-block;  }
 :host([aria-expanded=true]) .arrow::after { content:'▾' }
 :host(:not([aria-expanded])) .arrow { opacity:0; }
-:host([aria-expanded=true][aria-busy=true]) .arrow::after { content:'⏲'; }
+:host([aria-expanded=true][aria-busy=true]) .arrow::after {
+    content:'◠'; /* ◝↻⭮⍉🔾◠◡◕◖◝ */
+    font-weight:bold;
+    animation: spinner .5s linear infinite;
+    line-height:1;
+    font-size:.8em;
+}
+@keyframes spinner {
+    to { transform:rotate(360deg) }
+}
 
 [name=icon] { display:flex; min-width:1.7em; justify-content:center; font-weight:400; }
-
 `;
 
-customElements.define('u1-tree1', class extends HTMLElement {
+export class tree extends HTMLElement {
     constructor() {
         super();
         const shadow = this.attachShadow({mode: 'open', delegatesFocus: true});
         shadow.innerHTML = `
         <style>${css}</style>
         <div part=row tabindex=-1>
-
             <span class=arrow></span>
             <slot name=icon>📁</slot>
             <slot></slot>
-
         </div>
         <slot part=children name=children role=group></slot>`
 
@@ -69,8 +90,14 @@ customElements.define('u1-tree1', class extends HTMLElement {
         this._markup();
     }
     _markup(){
+
+        //const myLevel = this?.parentNode?.tagName === this.tagName ? parseInt(this.parentNode.getAttribute('aria-level'))+1 : 0;
+        const myLevel = this.root() === this ? 1 : parseInt(this.parentNode.getAttribute('aria-level')) + 1;
+        this.setAttribute('aria-level', myLevel);
+        this.style.setProperty('--level', myLevel);
+
         for (const child of this.children) {
-            child.tagName === 'U1-TREE1' && child.setAttribute('slot', 'children');
+            child.tagName === this.tagName && child.setAttribute('slot', 'children');
         }
         this.setAttribute('role', this.root() === this ? 'tree' : 'treeitem');
 
@@ -120,12 +147,11 @@ customElements.define('u1-tree1', class extends HTMLElement {
         if (this.getAttribute('aria-live') && this.getAttribute('aria-busy') !== 'true') {
             event.load = promise=>{
                 this.setAttribute('aria-busy','true');
-                console.log(promise)
                 promise.then(data => {
                     this.removeAttribute('aria-live');
                     this.removeAttribute('aria-busy');
                 }).catch(data=>{
-                    console.log('failed to load')
+                    console.warn('todo: u1-tree: failed to load')
                 });
             }
         }
@@ -134,13 +160,14 @@ customElements.define('u1-tree1', class extends HTMLElement {
         this.setAttribute('aria-expanded', doit?'true':'false');
     }
     root(){
-        return this.parentNode.tagName === 'U1-TREE1' ? this.parentNode.root() : this;
+        return this.parentNode.tagName === this.tagName ? this.parentNode.root() : this;
     }
 
     get selected(){
+        console.log('used? zzz')
         return this.root()._selected;
     }
-    set selected(el){
+    select(){
         let old = this.root()._selected;
         if (old) old.setAttribute('aria-selected', 'false');
         this.setAttribute('aria-selected', 'true');
@@ -149,7 +176,7 @@ customElements.define('u1-tree1', class extends HTMLElement {
     _select(el){ // like selected but also fires event
         const event = new CustomEvent('u1-tree1-select', {bubbles: true});
         this.dispatchEvent(event);
-        this.selected = el;
+        this.select();
     }
 
     get activeElement(){
@@ -165,22 +192,24 @@ customElements.define('u1-tree1', class extends HTMLElement {
     setFocus() {
         this.activeElement = this;
     }
-});
+}
+
+customElements.define('u1-tree1', tree);
 
 /*
 
-        /* * todo
-        this.addEventListener('dragover', e => {
-            const dropTargets = this.querySelectorAll('[droppable]');
-            const el = closestElementVertically(dropTargets, e.clientY);
-            el && this.setFocus(el);
-        });
-        this.addEventListener('dragend', e => {
-            const dropTargets = this.querySelectorAll('[droppable]');
-            const el = closestElementVertically(dropTargets, e.clientY);
-            console.log(e.dataTransfer.mozSourceNode)
-            el && el.append( e.dataTransfer.mozSourceNode )
-        });
+    /* * todo
+    this.addEventListener('dragover', e => {
+        const dropTargets = this.querySelectorAll('[droppable]');
+        const el = closestElementVertically(dropTargets, e.clientY);
+        el && this.setFocus(el);
+    });
+    this.addEventListener('dragend', e => {
+        const dropTargets = this.querySelectorAll('[droppable]');
+        const el = closestElementVertically(dropTargets, e.clientY);
+        console.log(e.dataTransfer.mozSourceNode)
+        el && el.append( e.dataTransfer.mozSourceNode )
+    });
 
 
 

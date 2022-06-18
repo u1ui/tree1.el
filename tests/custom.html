@@ -1,0 +1,53 @@
+<!DOCTYPE HTML>
+<html lang=en>
+<head>
+    <meta charset="utf-8">
+    <meta name=viewport content="width=device-width">
+    <script src="../../u1/tests/test-init.js" type=module></script>
+    <script src="../../u1/auto.js" type=module></script>
+    <title>Test</title>
+
+    <link rel=stylesheet href="https://cdn.jsdelivr.net/gh/u1ui/base.css/full.css">
+    <link rel=stylesheet href="https://cdn.jsdelivr.net/gh/u1ui/classless.css/variables.min.css">
+    <link rel=stylesheet href="https://cdn.jsdelivr.net/gh/u1ui/classless.css/classless.min.css">
+    <link rel=stylesheet href="https://cdn.jsdelivr.net/gh/u1ui/classless.css/more.min.css">
+    <link rel=stylesheet href="https://cdn.jsdelivr.net/gh/u1ui/classless.css/aria.min.css">
+    <link rel=stylesheet href="https://cdn.jsdelivr.net/gh/u1ui/classless.css/simple.min.css">
+
+    <style>
+        body {
+            place-content: initial;
+            --u1-ico-dir:'https://cdn.jsdelivr.net/npm/@material-icons/svg@1.0.11/svg/{icon}/baseline.svg';
+        }
+    </style>
+
+
+    <script src="../tree1.js" type=module></script>
+    <link rel=stylesheet href="../tree1.css">
+
+<body>
+
+<section>
+
+    <style>
+    u1-tree2::part(row):focus {
+        outline:1px dotted black;
+    }
+    u1-tree2[aria-selected=true]::part(row) {
+        background:#00000008;
+    }
+    </style>
+
+    <script type=module>
+        import {tree} from '../tree1.js';
+        customElements.define('u1-tree2', class extends tree {});
+    </script>
+
+    <u1-tree2 aria-expanded=true>root
+        <u1-tree2>Folder 2
+            <u1-tree2>File 2.1</u1-tree2>
+            <u1-tree2>File 2.2</u1-tree2>
+        </u1-tree2>
+    </u1-tree2>
+
+</section>

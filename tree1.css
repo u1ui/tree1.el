@@ -1,22 +1,9 @@
 
 u1-tree1 {
-    --indent:1em;
-    --level:0;
-    display:block;
-
-    /* grid experiment *
-    display:grid;
-    grid-template-columns: auto 1fr;
-    gap:.5rem;
-    /* */
+    zzz--indent:1em;
+    zzzdisplay:block; /* contents? */
 }
-/* *
-u1-tree1 u1-tree1 {
-    display:contents;
-}
-/* */
-
-u1-tree1:not([aria-expanded=true])::part(children) {
+zzzu1-tree1:not([aria-expanded=true])::part(children) {
     display:none;
 }
 u1-tree1::part(row):focus {
@@ -25,12 +12,3 @@ u1-tree1::part(row):focus {
 u1-tree1[aria-selected=true]::part(row) {
     background:#00000008;
 }
-
-
-/* todo */
-u1-tree1 > u1-tree1 { --level:1 }
-u1-tree1 > u1-tree1 > u1-tree1 { --level:2 }
-u1-tree1 > u1-tree1 > u1-tree1 > u1-tree1 { --level:3 }
-u1-tree1 > u1-tree1 > u1-tree1 > u1-tree1 > u1-tree1 { --level:4 }
-u1-tree1 > u1-tree1 > u1-tree1 > u1-tree1 > u1-tree1 > u1-tree1 { --level:5 }
-u1-tree1 > u1-tree1 > u1-tree1 > u1-tree1 > u1-tree1 > u1-tree1 > u1-tree1 { --level:6 }

@@ -31,6 +31,7 @@
 
     <u1-tree1 aria-expanded=true>root
         <u1-tree1 aria-expanded=true droppable>Folder 2
+
             <u1-tree1>File 2.1</u1-tree1>
             <u1-tree1>Folder 2.2
                 <u1-tree1>
@@ -85,7 +86,6 @@
     u1-tree1[aria-selected=true]::part(row) {
         background:transparent;
         background:#00000008;
-        font-weight:bold;
     }
     u1-tree1::part(row):hover {
         background:#00000004;
@@ -100,7 +100,7 @@
                     tree.innerHTML += '<u1-tree1><span slot=icon>🖼</span>Dynamic File 1</u1-tree1>';
                     tree.innerHTML += '<u1-tree1><span slot=icon>📄</span>Document</u1-tree1>';
                     tree.innerHTML += '<u1-tree1 aria-expanded aria-live=off>Folder</u1-tree1>';
-                }, 400));
+                }, 700));
             }
         });
 
