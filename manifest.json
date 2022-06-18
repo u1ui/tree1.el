@@ -18,19 +18,19 @@
                     ],
                     "events": [
                         {
-                            "name": "u1-tree-expand",
+                            "name": "u1-tree1-expand",
                             "type": {
                                 "text": "Event"
                             }
                         },
                         {
-                            "name": "u1-tree-collapse",
+                            "name": "u1-tree1-collapse",
                             "type": {
                                 "text": "Event"
                             }
                         },
                         {
-                            "name": "u1-tree-select",
+                            "name": "u1-tree1-select",
                             "type": {
                                 "text": "Event"
                             }
