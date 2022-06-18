@@ -90,17 +90,18 @@ export class tree extends HTMLElement {
         this._markup();
     }
     _markup(){
-
-        //const myLevel = this?.parentNode?.tagName === this.tagName ? parseInt(this.parentNode.getAttribute('aria-level'))+1 : 0;
+        // own level
         const myLevel = this.root() === this ? 1 : parseInt(this.parentNode.getAttribute('aria-level')) + 1;
         this.setAttribute('aria-level', myLevel);
         this.style.setProperty('--level', myLevel);
 
+        // slot subnodes
         for (const child of this.children) {
             child.tagName === this.tagName && child.setAttribute('slot', 'children');
         }
         this.setAttribute('role', this.root() === this ? 'tree' : 'treeitem');
 
+        // if has children, its expandable
         if (this.items().length && !this.hasAttribute('aria-expanded')) this.setAttribute('aria-expanded', 'false');
     }
     items(){
@@ -163,10 +164,6 @@ export class tree extends HTMLElement {
         return this.parentNode.tagName === this.tagName ? this.parentNode.root() : this;
     }
 
-    get selected(){
-        console.log('used? zzz')
-        return this.root()._selected;
-    }
     select(){
         let old = this.root()._selected;
         if (old) old.setAttribute('aria-selected', 'false');

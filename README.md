@@ -50,7 +50,8 @@ treeElement.addEventListener('u1-tree1-select', (e) => { ... });
 
 ## API
 ```js
-el.select(); // todo!
+el.select();
+el.toggleExpand(true/false);
 ```
 
 
@@ -59,4 +60,3 @@ el.select(); // todo!
 https://raw.githack.com/u1ui/tree1.el/main/tests/custom.html  
 https://raw.githack.com/u1ui/tree1.el/main/tests/minimal.html  
 https://raw.githack.com/u1ui/tree1.el/main/tests/test.html  
-
