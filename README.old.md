@@ -1,20 +1,22 @@
-# &lt;u1-tree1&gt; - element
+# tree.el
 treeview component (beta)
 
 ## Ussage
-
 ```html
-<u1-tree1 aria-expanded=true>root
-    <u1-tree1 aria-expanded=true>Folder 1
-        <u1-tree1>File 1.1</u1-tree1>
-        <u1-tree1>File 1.2</u1-tree1>
+<u1-tree1>
+    <u1-tree1>
+        Folder 1
+        <u1-tree1>
+            <span slot=icon>📄</span>
+            File 1.1
+        </u1-tree1>
     </u1-tree1>
-    <u1-tree1>Folder 3
-        <u1-tree1>File 3.1</u1-tree1>
-        <u1-tree1>File 3.2</u1-tree1>
+    <u1-tree1>
+        <span slot=icon>📄</span>
+        File 3
     </u1-tree1>
 </u1-tree1>
-```
+```	
 
 ## Settings
 
@@ -29,6 +31,7 @@ This is either not expandable or like aria-expanded="false" if it has children.
 `<u1-tree1 aria-live></u1-tree1>`
 This indicates, that the node has to be loaded.  
 The `u1-tree1-collapse` event will get a property `event.load(promise)` to load their children.
+
 
 ## Events
 
@@ -46,33 +49,15 @@ treeElement.addEventListener('u1-tree1-select', (e) => { ... });
 ```
 
 ## API
-
 ```js
 el.select();
 el.toggleExpand(true/false);
 ```
 
+
+
 ## Demos
-
-https://raw.githack.com/u1ui/tree1.el/main/tests/custom.html  
-https://raw.githack.com/u1ui/tree1.el/main/tests/minimal.html  
-https://raw.githack.com/u1ui/tree1.el/main/tests/test.html
-
-## Install
-
-```html
-<link href="https://cdn.jsdelivr.net/gh/u1ui/tree1.el@1.0.0/tree1.min.css" rel=stylesheet>
-<script src="https://cdn.jsdelivr.net/gh/u1ui/tree1.el@1.0.0/tree1.min.js" type=module>
-```
-
-## Demo
-
 https://raw.githack.com/u1ui/tree1.el/main/tests/custom.html  
 https://raw.githack.com/u1ui/tree1.el/main/tests/minimal.html  
 https://raw.githack.com/u1ui/tree1.el/main/tests/test.html  
-
-## About
-
-- MIT License, Copyright (c) 2022 <u1> (like all repositories in this organization) <br>
-- Suggestions, ideas, finding bugs and making pull requests make us very happy. ♥
 
