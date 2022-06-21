@@ -16,6 +16,26 @@ treeview component (beta)
 </u1-tree1>
 ```
 
+## API
+
+```js
+el.select();
+el.toggleExpand(true/false);
+```
+
+## Install
+
+```html
+<link href="https://cdn.jsdelivr.net/gh/u1ui/tree1.el@1.0.0/tree1.min.css" rel=stylesheet>
+<script src="https://cdn.jsdelivr.net/gh/u1ui/tree1.el@1.0.0/tree1.min.js" type=module>
+```
+
+## Demos
+
+[custom.html](https://raw.githack.com/u1ui/tree1.el/main/tests/custom.html)  
+[minimal.html](https://raw.githack.com/u1ui/tree1.el/main/tests/minimal.html)  
+[test.html](https://raw.githack.com/u1ui/tree1.el/main/tests/test.html)  
+
 ## Settings
 
 ### aria-expanded
@@ -44,32 +64,6 @@ treeElement.addEventListener('u1-tree1-collapse', (e) => {...});
 ```js
 treeElement.addEventListener('u1-tree1-select', (e) => { ... });
 ```
-
-## API
-
-```js
-el.select();
-el.toggleExpand(true/false);
-```
-
-## Demos
-
-https://raw.githack.com/u1ui/tree1.el/main/tests/custom.html  
-https://raw.githack.com/u1ui/tree1.el/main/tests/minimal.html  
-https://raw.githack.com/u1ui/tree1.el/main/tests/test.html
-
-## Install
-
-```html
-<link href="https://cdn.jsdelivr.net/gh/u1ui/tree1.el@1.0.0/tree1.min.css" rel=stylesheet>
-<script src="https://cdn.jsdelivr.net/gh/u1ui/tree1.el@1.0.0/tree1.min.js" type=module>
-```
-
-## Demo
-
-https://raw.githack.com/u1ui/tree1.el/main/tests/custom.html  
-https://raw.githack.com/u1ui/tree1.el/main/tests/minimal.html  
-https://raw.githack.com/u1ui/tree1.el/main/tests/test.html  
 
 ## About
 
