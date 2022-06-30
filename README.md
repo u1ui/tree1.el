@@ -38,8 +38,8 @@ el.toggleExpand(true/false);
 ## Install
 
 ```html
-<link href="https://cdn.jsdelivr.net/gh/u1ui/tree1.el@1.0.0/tree1.min.css" rel=stylesheet>
-<script src="https://cdn.jsdelivr.net/gh/u1ui/tree1.el@1.0.0/tree1.min.js" type=module>
+<link href="https://cdn.jsdelivr.net/gh/u1ui/tree1.el@1.1.0/tree1.min.css" rel=stylesheet>
+<script src="https://cdn.jsdelivr.net/gh/u1ui/tree1.el@1.1.0/tree1.min.js" type=module>
 ```
 
 ## Demos
