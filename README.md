@@ -16,6 +16,18 @@ treeview component (beta)
 </u1-tree1>
 ```
 
+```css
+u1-tree1::part(row):hover {
+    background:#00000004;
+}
+u1-tree1[aria-selected=true]::part(row) {
+    background:#00000008;
+}
+u1-tree1::part(row):focus {
+    outline:1px dotted;
+}
+```
+
 ## API
 
 ```js
@@ -32,9 +44,9 @@ el.toggleExpand(true/false);
 
 ## Demos
 
-[custom.html](https://raw.githack.com/u1ui/tree1.el/main/tests/custom.html)  
-[minimal.html](https://raw.githack.com/u1ui/tree1.el/main/tests/minimal.html)  
-[test.html](https://raw.githack.com/u1ui/tree1.el/main/tests/test.html)  
+[custom.html](http://gcdn.li/u1ui/tree1.el@main/tests/custom.html)  
+[minimal.html](http://gcdn.li/u1ui/tree1.el@main/tests/minimal.html)  
+[test.html](http://gcdn.li/u1ui/tree1.el@main/tests/test.html)  
 
 ## Settings
 
