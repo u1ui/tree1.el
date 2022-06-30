@@ -198,8 +198,8 @@ export class tree extends HTMLElement {
 
     path(){
         if (this.isRoot()) return [this];
-        return [this].concat(this.parentNode.path()); // as we dont cache, we dont have to make a copy
-        // return this.isRoot() ? [this] : [...this.parentNode.path(), this];
+        return this.parentNode.path().concat(this);
+        // return this.isRoot() ? [this] : [...this.parentNode.path(), this];  // as we dont cache, we dont have to make a copy
     }
 }
 
