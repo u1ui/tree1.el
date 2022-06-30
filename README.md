@@ -33,13 +33,14 @@ u1-tree1::part(row):focus {
 ```js
 el.select();
 el.toggleExpand(true/false);
+el.path(); // returns path to element
 ```
 
 ## Install
 
 ```html
-<link href="https://cdn.jsdelivr.net/gh/u1ui/tree1.el@1.2.0/tree1.min.css" rel=stylesheet>
-<script src="https://cdn.jsdelivr.net/gh/u1ui/tree1.el@1.2.0/tree1.min.js" type=module>
+<link href="https://cdn.jsdelivr.net/gh/u1ui/tree1.el@1.3.0/tree1.min.css" rel=stylesheet>
+<script src="https://cdn.jsdelivr.net/gh/u1ui/tree1.el@1.3.0/tree1.min.js" type=module>
 ```
 
 ## Demos
@@ -81,4 +82,3 @@ treeElement.addEventListener('u1-tree1-select', (e) => { ... });
 
 - MIT License, Copyright (c) 2022 <u1> (like all repositories in this organization) <br>
 - Suggestions, ideas, finding bugs and making pull requests make us very happy. ♥
-
