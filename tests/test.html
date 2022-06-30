@@ -93,6 +93,7 @@
     <script type=module>
         document.addEventListener('u1-tree1-expand',e=>{
             const tree = e.target;
+            console.log(tree.path());
             if (e.load) {
                 e.load(delaied(()=>{
                     tree.innerHTML += '<u1-tree1><span slot=icon>🖼</span>Dynamic File 1</u1-tree1>';
