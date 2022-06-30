@@ -151,8 +151,11 @@ export class tree extends HTMLElement {
                 promise.then(data => {
                     this.removeAttribute('aria-live');
                     this.removeAttribute('aria-busy');
+                    setTimeout(()=>{ // make unexpandable if no childs
+                        !this.items().length && this.removeAttribute('aria-expanded');
+                    },100);
                 }).catch(data=>{
-                    console.warn('todo: u1-tree: failed to load')
+                    console.warn('todo: u1-tree: failed to load');
                 });
             }
         }
@@ -161,7 +164,7 @@ export class tree extends HTMLElement {
         this.setAttribute('aria-expanded', doit?'true':'false');
     }
     root(){
-        return this.parentNode.tagName === this.tagName ? this.parentNode.root() : this;
+        return this.isRoot() ? this : this.parentNode.root();
     }
 
     select(){
@@ -188,6 +191,15 @@ export class tree extends HTMLElement {
     }
     setFocus() {
         this.activeElement = this;
+    }
+    isRoot(){
+        return this.parentNode.tagName !== this.tagName;
+    }
+
+    path(){
+        if (this.isRoot()) return [this];
+        return [this].concat(this.parentNode.path()); // as we dont cache, we dont have to make a copy
+        // return this.isRoot() ? [this] : [...this.parentNode.path(), this];
     }
 }
 
