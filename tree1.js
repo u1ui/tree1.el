@@ -36,6 +36,7 @@ let css = `
 [name=icon] { display:flex; min-width:1.7em; justify-content:center; font-weight:400; }
 `;
 
+
 export class tree extends HTMLElement {
     constructor() {
         super();
@@ -45,7 +46,7 @@ export class tree extends HTMLElement {
         <div part=row tabindex=-1>
             <span class=arrow></span>
             <slot name=icon>📁</slot>
-            <slot></slot>
+            <slot part=content></slot>
         </div>
         <slot part=children name=children role=group></slot>`
 
@@ -66,9 +67,25 @@ export class tree extends HTMLElement {
                 ArrowDown:  ()=> this.nextFocusable()?.setFocus(),
                 ArrowRight: ()=> !this.isExpanded() ? this.toggleExpand(true) : this.nextFocusable()?.setFocus(),
                 ArrowLeft:  ()=> this.isExpanded() ? this.toggleExpand(false) : this.parentNode.setFocus?.(),
-                Enter:      ()=> this._select(),
+                Enter:      ()=> {this._select(); this.toggleExpand(); }, // todo toggle?
                 ' ':        ()=> this._select(),
+                Home:       ()=> this.root().setFocus(),
+                // todo End:        ()=> this.root().setFocus(),
             }[e.key];
+
+            // focus next where text starts with the key pressed
+            const isChar = /^.$/u.test(e.key);
+            if (isChar) {
+                let current = this.nextFocusable() || this.root();
+                while (current && current !== this) {
+                    let text = current.shadowRoot.querySelector('[part=content]').assignedNodes().map(item=>item.textContent).join(' ').trim().toLowerCase();
+                    if (text.startsWith(e.key)) {
+                        current.setFocus();
+                        break;
+                    }
+                    current = current.nextFocusable() || this.root();
+                }
+            }
 
             if (fn) {
                 fn();
@@ -115,7 +132,18 @@ export class tree extends HTMLElement {
                 next = item.items().at(0);
             }
             if (!next) next = item.nextElementSibling;
-            if (!next) next = item.parentNode?.nextElementSibling;
+
+            if (!next) {
+                while (item.parentNode) {
+                    item = item.parentNode;
+                    if (item.nextElementSibling) {
+                        next = item.nextElementSibling;
+                        break;
+                    }
+                }
+            }
+
+            if (next.tagName !== this.tagName) return null;
             if (next) return next; // todo: check if it is disabled
             item = next;
         }
@@ -205,20 +233,21 @@ export class tree extends HTMLElement {
 
 customElements.define('u1-tree1', tree);
 
+
 /*
 
-    /* * todo
-    this.addEventListener('dragover', e => {
-        const dropTargets = this.querySelectorAll('[droppable]');
-        const el = closestElementVertically(dropTargets, e.clientY);
-        el && this.setFocus(el);
-    });
-    this.addEventListener('dragend', e => {
-        const dropTargets = this.querySelectorAll('[droppable]');
-        const el = closestElementVertically(dropTargets, e.clientY);
-        console.log(e.dataTransfer.mozSourceNode)
-        el && el.append( e.dataTransfer.mozSourceNode )
-    });
+/* * todo
+this.addEventListener('dragover', e => {
+    const dropTargets = this.querySelectorAll('[droppable]');
+    const el = closestElementVertically(dropTargets, e.clientY);
+    el && this.setFocus(el);
+});
+this.addEventListener('dragend', e => {
+    const dropTargets = this.querySelectorAll('[droppable]');
+    const el = closestElementVertically(dropTargets, e.clientY);
+    console.log(e.dataTransfer.mozSourceNode)
+    el && el.append( e.dataTransfer.mozSourceNode )
+});
 
 
 
