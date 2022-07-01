@@ -2,12 +2,11 @@
 Treeview component
 
 ## Features
+
 - Keyboard navigation
 - Focus on the next item that starts with the pressed key
 - Expand/collapse events
 - Lazy loading of children
-
-
 
 ## Ussage
 
@@ -34,20 +33,6 @@ u1-tree1::part(row):focus {
     outline:1px dotted;
 }
 ```
-
-## Install
-
-```html
-<link href="https://cdn.jsdelivr.net/gh/u1ui/tree1.el@1.4.0/tree1.min.css" rel=stylesheet>
-<script src="https://cdn.jsdelivr.net/gh/u1ui/tree1.el@1.4.0/tree1.min.js" type=module>
-```
-
-## Demos
-
-[custom.html](http://gcdn.li/u1ui/tree1.el@main/tests/custom.html)  
-[minimal.html](http://gcdn.li/u1ui/tree1.el@main/tests/minimal.html)  
-[test.html](http://gcdn.li/u1ui/tree1.el@main/tests/test.html)  
-
 
 ## API
 
@@ -97,15 +82,27 @@ treeElement.addEventListener('u1-tree1-select', (e) => { ... });
 | u1-tree1[aria-selected=true] | Item when selected |
 | u1-tree1:focus | Item has focus |
 
+## Install
 
+```html
+<link href="https://cdn.jsdelivr.net/gh/u1ui/tree1.el@1.4.0/tree1.min.css" rel=stylesheet>
+<script src="https://cdn.jsdelivr.net/gh/u1ui/tree1.el@1.4.0/tree1.min.js" type=module>
+```
+
+## Demos
+
+[custom.html](http://gcdn.li/u1ui/tree1.el@main/tests/custom.html)  
+[minimal.html](http://gcdn.li/u1ui/tree1.el@main/tests/minimal.html)  
+[test.html](http://gcdn.li/u1ui/tree1.el@main/tests/test.html)  
 
 ## Todo
+
 Ask me if you need it!
 - Add support for multiple selection
 - Drag and drop
-
 
 ## About
 
 - MIT License, Copyright (c) 2022 <u1> (like all repositories in this organization) <br>
 - Suggestions, ideas, finding bugs and making pull requests make us very happy. ♥
+
