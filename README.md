@@ -85,8 +85,8 @@ treeElement.addEventListener('u1-tree1-select', (e) => { ... });
 ## Install
 
 ```html
-<link href="https://cdn.jsdelivr.net/gh/u1ui/tree1.el@1.4.0/tree1.min.css" rel=stylesheet>
-<script src="https://cdn.jsdelivr.net/gh/u1ui/tree1.el@1.4.0/tree1.min.js" type=module>
+<link href="https://cdn.jsdelivr.net/gh/u1ui/tree1.el@1.4.1/tree1.min.css" rel=stylesheet>
+<script src="https://cdn.jsdelivr.net/gh/u1ui/tree1.el@1.4.1/tree1.min.js" type=module>
 ```
 
 ## Demos
