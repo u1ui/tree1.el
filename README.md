@@ -8,7 +8,7 @@ Treeview component
 - Expand/collapse events
 - Lazy loading of children
 
-## Ussage
+## Usage
 
 ```html
 <u1-tree1 aria-expanded=true>root
@@ -86,7 +86,7 @@ treeElement.addEventListener('u1-tree1-select', (e) => { ... });
 
 ```html
 <link href="https://cdn.jsdelivr.net/gh/u1ui/tree1.el@x.x.x/tree1.min.css" rel=stylesheet>
-<script src="https://cdn.jsdelivr.net/gh/u1ui/tree1.el@x.x.x/tree1.min.js" type=module>
+<script src="https://cdn.jsdelivr.net/gh/u1ui/tree1.el@x.x.x/tree1.min.js" type=module></script>
 ```
 
 ## Demos

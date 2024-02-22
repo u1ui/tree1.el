@@ -1,7 +1,7 @@
 # tree.el
 treeview component (beta)
 
-## Ussage
+## Usage
 ```html
 <u1-tree1>
     <u1-tree1>
