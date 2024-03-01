@@ -39,8 +39,8 @@ u1-tree1::part(row):focus {
 ### Javascript
 
 ```js
-el.select();
-el.toggleExpand(true/false);
+el.select(); // selects the element
+el.toggleExpand(true/false/undefined); // undefined toggles
 el.path(); // returns path to element
 el.root(); // returns root element of the tree-item
 ```

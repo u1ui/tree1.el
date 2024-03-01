@@ -4,15 +4,21 @@
     <meta charset="utf-8">
     <meta name=viewport content="width=device-width">
     <script src="../../u1/tests/test-init.js" type=module></script>
-    <script src="../../u1/auto.js" type=module></script>
+    <xscript src="../../u1/auto.js" type=module></script>
     <title>Test</title>
 
     <link rel=stylesheet href="https://cdn.jsdelivr.net/gh/u1ui/base.css/full.css">
     <link rel=stylesheet href="https://cdn.jsdelivr.net/gh/u1ui/classless.css/variables.min.css">
     <link rel=stylesheet href="https://cdn.jsdelivr.net/gh/u1ui/classless.css/classless.min.css">
     <link rel=stylesheet href="https://cdn.jsdelivr.net/gh/u1ui/classless.css/more.min.css">
-    <link rel=stylesheet href="https://cdn.jsdelivr.net/gh/u1ui/classless.css/aria.min.css">
     <link rel=stylesheet href="https://cdn.jsdelivr.net/gh/u1ui/classless.css/simple.min.css">
+
+    <script src="../../code.el/code.js" type=module></script>
+    <link href="../../code.el/code.css" rel=stylesheet>
+    <script src="../../tooltip.el/tooltip.js" type=module></script>
+    <link href="../../tooltip.el/tooltip.css" rel=stylesheet>
+    <script src="../../ico.el/ico.js" type=module></script>
+    <link href="../../ico.el/ico.css" rel=stylesheet>
 
     <style>
         body {
@@ -26,10 +32,10 @@
 
 <body>
 
-<section>
-
+<section id=demo>
+    
     <u1-tree1 aria-expanded=true>root
-        <u1-tree1 aria-expanded=true droppable>Folder 2
+        <u1-tree1 aria-expanded=true>Folder 2
 
             <u1-tree1>File 2.1</u1-tree1>
             <u1-tree1>Folder 2.2
@@ -67,12 +73,24 @@
                     Alarm
                 </u1-tree1>
             </u1-tree1>
+            <u1-tree1 draggable="true">
+                <u1-ico slot=icon icon=drag_indicator>x</u1-ico>
+                Draggable
+            </u1-tree1>
+
         </u1-tree1>
-        <u1-tree1 aria-expanded aria-live=off>
+        <u1-tree1 aria-expanded=false aria-live=off>
             Folder 3 (dynamic)
         </u1-tree1>
     </u1-tree1>
 
+</section>
+
+<section>
+
+    <u1-code element=demo editable trim></u1-code>
+
+    <u1-code trim editable>
     <style>
     u1-tree1::part(row) {
         border-radius:.3rem;
@@ -82,35 +100,142 @@
         background:transparent;
     }
     u1-tree1[aria-selected=true]::part(row) {
-        background:transparent;
         background:#00000008;
     }
     u1-tree1::part(row):hover {
         background:#00000004;
     }
     </style>
+    </u1-code>
 
+    <u1-code trim>
     <script type=module>
-        document.addEventListener('u1-tree1-expand',e=>{
-            const tree = e.target;
-            console.log(tree.path());
-            if (e.load) {
-                e.load(delaied(()=>{
-                    tree.innerHTML += '<u1-tree1><span slot=icon>🖼</span>Dynamic File 1</u1-tree1>';
-                    tree.innerHTML += '<u1-tree1><span slot=icon>📄</span>Document</u1-tree1>';
-                    tree.innerHTML += '<u1-tree1 aria-expanded aria-live=off>Folder</u1-tree1>';
-                }, 700));
-            }
-        });
+    /* load dynamic items */
+    document.addEventListener('u1-tree1-expand', event => {
+        const treeItem = event.target;
+        
+        // if load is present, it requires a promise that will load the items
+        // (indicated by `aria-expanded=false` and `aria-live=off`)
+        event.load?.(loadItems(treeItem));
+    });
+    const loadItems = async (item) => {
+        await delay(600);
+        item.innerHTML += '<u1-tree1><span slot=icon>🖼</span>Dynamic File 1</u1-tree1>';
+        item.innerHTML += '<u1-tree1><span slot=icon>📄</span>Document</u1-tree1>';
+        item.innerHTML += '<u1-tree1 aria-expanded=false aria-live=off>Folder</u1-tree1>';
+    }
+    </script>
+    </u1-code>
 
-        const delaied = (fn, ms)=>{
-            return new Promise(resolve => {
-                setTimeout(()=>{
-                    fn();
-                    resolve()
-                }, ms);
-            });
+    <script>
+        delay = function(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
         }
     </script>
 
+
 </section>
+
+
+
+
+
+<script type=module>
+/* drag & drop experiment */
+
+const dropPositionIndicator = document.createElement('div');
+dropPositionIndicator.innerHTML = '➔';
+dropPositionIndicator.style.display = 'none';
+dropPositionIndicator.style.position = 'absolute';
+dropPositionIndicator.style.pointerEvents = 'none';
+dropPositionIndicator.style.zIndex = 1000;
+dropPositionIndicator.style.fontSize = '1.2rem';
+dropPositionIndicator.style.transform = 'translate(0, -50%)';
+document.body.appendChild(dropPositionIndicator);
+
+let dragSrcEl = null;
+
+const dragAndDropHandler = {
+    handleEvent(event) {
+        if (event.type !== 'dragstart' && !dragSrcEl) return;
+        if (!this['on' + event.type]) return
+        const target = event.target;
+        const closest = target.closest('u1-tree1');
+        if (!closest) return;
+        this['on' + event.type]({closest, target, event});
+    },
+    ondragstart({target, event}) {
+        if (target.tagName !== 'U1-TREE1') return;
+        dragSrcEl = target;
+        event.dataTransfer.effectAllowed = 'move';
+    },
+    ondragover({closest, event}) {
+        event.preventDefault();
+
+        this.currentParent = closest;
+        this.currentNext = null;
+
+        const oHeight = closest.offsetHeight;
+        if (event.offsetY < oHeight * .2) {
+            this.currentParent = closest.parentNode;
+            this.currentNext = closest;
+        }
+        if (event.offsetY > oHeight * .7) {
+            this.currentParent = closest.parentNode;
+            this.currentNext = closest.nextElementSibling;
+        }
+        if (this.currentParent === closest && !this.expandTimer) {
+            this.resetExpandTimer(this.currentParent);
+        }
+
+        // indicator
+        let x = closest.shadowRoot.querySelector('[name=icon]').getBoundingClientRect().left - 50;
+        let y;
+        if (this.currentNext) {
+            y = this.currentNext.offsetTop;
+        } else {
+            y = closest.offsetTop + closest.offsetHeight / 2;
+        }
+        dropPositionIndicator.style.display = 'block';
+        dropPositionIndicator.style.top = y + 'px';
+        dropPositionIndicator.style.left = x + 'px';
+    },
+    ondragleave({closest}) {
+        this.resetExpandTimer();
+        closest.style.borderColor = 'transparent';
+    },
+    ondrop({closest, event}) {
+        event.stopPropagation();
+        event.preventDefault();
+        if (dragSrcEl !== closest) {
+            if (this.currentParent && dragSrcEl !== this.currentNext) {
+                if (this.currentNext) {
+                    this.currentParent.insertBefore(dragSrcEl, this.currentNext);
+                } else {
+                    this.currentParent.appendChild(dragSrcEl);
+                }
+            }
+            closest.toggleExpand(true);
+        }
+        closest.style.border = '';
+    },
+    ondragend() {
+        dropPositionIndicator.style.display = 'none';
+        dragSrcEl = null;
+    },
+    resetExpandTimer(item) {
+        clearTimeout(this.expandTimer);
+        this.expandTimer = null;
+        if (item) {
+            this.expandTimer = setTimeout(()=>{
+                this.expandTimer = null;
+                this.currentParent.toggleExpand(true);
+            }, 500);
+        }
+    },
+};
+['dragstart', 'dragover', 'dragenter','dragleave', 'drop', 'dragend'].forEach(eventType => {
+    document.addEventListener(eventType, dragAndDropHandler, false);
+});
+</script>
+    

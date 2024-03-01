@@ -10,16 +10,6 @@ let css = `
 :host(:not([aria-expanded=true])) [part=children] {
     display:none;
 }
-
-[part=row] { display:flex; padding:.15em 0; padding-left:calc( var(--indent) * (var(--level) - 1) ); }
-
-.arrow {
-    font-weight:normal !important;
-    min-width:1.1em;
-    text-align:center;
-}
-.arrow::after { content:'▸'; }
-.arrow::after { display:inline-block;  }
 :host([aria-expanded=true]) .arrow::after { content:'▾' }
 :host(:not([aria-expanded])) .arrow { opacity:0; }
 :host([aria-expanded=true][aria-busy=true]) .arrow::after {
@@ -29,11 +19,30 @@ let css = `
     line-height:1;
     font-size:.8em;
 }
-@keyframes spinner {
-    to { transform:rotate(360deg) }
+
+[part=row] {
+    display:flex;
+    padding:.15em 0;
+    padding-left:calc( var(--indent) * (var(--level) - 1) );
+    gap:.3em;
 }
 
-[name=icon] { display:flex; min-width:1.7em; justify-content:center; font-weight:400; }
+.arrow {
+    font-weight:normal !important;
+    min-width:1.1em;
+    text-align:center;
+}
+.arrow::after { content:'▸'; }
+.arrow::after { display:inline-block;  }
+@keyframes spinner { to { transform:rotate(360deg) } }
+
+[name=icon] {
+    display:flex;
+    align-items: center;
+    justify-content:center;
+    min-width:1.7em;
+    font-weight:400;
+}
 `;
 
 
@@ -61,7 +70,6 @@ export class tree extends HTMLElement {
         });
         this.addEventListener('keydown',e=>{
             if (e.target !== this) return;
-
             let fn = {
                 ArrowUp:    ()=> this.prevFocusable()?.setFocus(),
                 ArrowDown:  ()=> this.nextFocusable()?.setFocus(),
@@ -70,9 +78,7 @@ export class tree extends HTMLElement {
                 Enter:      ()=> {this._select(); this.toggleExpand(); }, // todo toggle?
                 ' ':        ()=> this._select(),
                 Home:       ()=> this.root().setFocus(),
-                // todo End:        ()=> this.root().setFocus(),
             }[e.key];
-
             // focus next where text starts with the key pressed
             const isChar = /^.$/u.test(e.key);
             if (isChar) {
@@ -86,7 +92,6 @@ export class tree extends HTMLElement {
                     current = current.nextFocusable() || this.root();
                 }
             }
-
             if (fn) {
                 fn();
                 e.preventDefault();
@@ -119,7 +124,13 @@ export class tree extends HTMLElement {
         this.setAttribute('role', this.root() === this ? 'tree' : 'treeitem');
 
         // if has children, its expandable
-        if (this.items().length && !this.hasAttribute('aria-expanded')) this.setAttribute('aria-expanded', 'false');
+        if (!this.hasAttribute('aria-expanded')) {
+            if (this.items().length) {
+                this.setAttribute('aria-expanded', 'false');
+            } else {
+                this.removeAttribute('aria-expanded');
+            }
+        }
     }
     items(){
         return this.shadowRoot.querySelector('[part=children]').assignedElements();
@@ -144,7 +155,7 @@ export class tree extends HTMLElement {
             }
 
             if (next.tagName !== this.tagName) return null;
-            if (next) return next; // todo: check if it is disabled
+            if (next) return next;
             item = next;
         }
     }
@@ -158,7 +169,7 @@ export class tree extends HTMLElement {
                 }
             }
             if (!next) next = item.parentNode;
-            if (next) return next; // todo: check if it is disabled
+            if (next) return next;
             item = next;
         }
     }
@@ -166,7 +177,8 @@ export class tree extends HTMLElement {
         return this.getAttribute('aria-expanded') === 'true';
     }
     isExpandable() {
-        return this.hasAttribute('aria-expanded') || this.items().length;
+        const attr = this.getAttribute('aria-expanded');
+        return attr === 'true' || attr === 'false' || this.items().length;
     }
     toggleExpand(doit) {
         if (!this.isExpandable()) return;
@@ -188,7 +200,6 @@ export class tree extends HTMLElement {
             }
         }
         this.dispatchEvent(event);
-
         this.setAttribute('aria-expanded', doit?'true':'false');
     }
     root(){
@@ -201,7 +212,7 @@ export class tree extends HTMLElement {
         this.setAttribute('aria-selected', 'true');
         this.root()._selected = this;
     }
-    _select(el){ // like selected but also fires event
+    _select(){ // like selected but also fires event
         const event = new CustomEvent('u1-tree1-select', {bubbles: true});
         this.dispatchEvent(event);
         this.select();
@@ -232,42 +243,3 @@ export class tree extends HTMLElement {
 }
 
 customElements.define('u1-tree1', tree);
-
-
-/*
-
-/* * todo
-this.addEventListener('dragover', e => {
-    const dropTargets = this.querySelectorAll('[droppable]');
-    const el = closestElementVertically(dropTargets, e.clientY);
-    el && this.setFocus(el);
-});
-this.addEventListener('dragend', e => {
-    const dropTargets = this.querySelectorAll('[droppable]');
-    const el = closestElementVertically(dropTargets, e.clientY);
-    console.log(e.dataTransfer.mozSourceNode)
-    el && el.append( e.dataTransfer.mozSourceNode )
-});
-
-
-
-
-function minDistanceToElementVertically(element, y) {
-    let rect = element.getBoundingClientRect();
-    return Math.min(Math.abs(rect.top - y), Math.abs(rect.bottom - y));
-}
-
-function closestElementVertically(elements, y) {
-    let closest = null;
-    let minDistance = Infinity;
-    for (let el of elements) {
-        if (el.nodeType !== 1) continue;
-        let distance = minDistanceToElementVertically(el, y);
-        if (distance < minDistance) {
-            minDistance = distance;
-            closest = el;
-        }
-    }
-    return closest;
-}
-*/
