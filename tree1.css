@@ -10,13 +10,17 @@ u1-tree1::part(row):focus {
 u1-tree1[aria-selected=true]::part(row) {
     background:#00000008;
 }
+u1-tree1[draggable]::part(row) {
+    cursor:grab;
+}
 
 
 u1-tree1:not(:defined) {
-    padding:.2em 0 0 0;
+    padding-block-start:.2em;
     display:list-item;
     list-style-position: inside;
     > u1-tree1 {
-        padding-left:1.2em;
+        padding-inline-start:1.2em;
+
     }
 }

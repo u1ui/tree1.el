@@ -22,8 +22,9 @@ let css = `
 
 [part=row] {
     display:flex;
-    padding:.15em 0;
-    padding-left:calc( var(--indent) * (var(--level) - 1) );
+    align-items:baseline;
+    padding-block: .15em;
+    padding-inline-start:calc( var(--indent) * (var(--level) - 1) );
     gap:.3em;
 }
 
@@ -40,8 +41,9 @@ let css = `
     display:flex;
     align-items: center;
     justify-content:center;
-    min-width:1.7em;
+    min-inline-size:1.7em;
     font-weight:400;
+    align-self:stretch;
 }
 `;
 
@@ -113,7 +115,8 @@ export class tree extends HTMLElement {
     }
     _markup(){
         // own level
-        const myLevel = this.root() === this ? 1 : parseInt(this.parentNode.getAttribute('aria-level')) + 1;
+        const root = this.root();
+        const myLevel = root === this ? 1 : parseInt(this.parentNode.getAttribute('aria-level')) + 1;
         this.setAttribute('aria-level', myLevel);
         this.style.setProperty('--level', myLevel);
 
@@ -121,7 +124,12 @@ export class tree extends HTMLElement {
         for (const child of this.children) {
             child.tagName === this.tagName && child.setAttribute('slot', 'children');
         }
-        this.setAttribute('role', this.root() === this ? 'tree' : 'treeitem');
+        this.setAttribute('role', root === this ? 'tree' : 'treeitem');
+
+        // make it selectable if its the root and no other is selected
+        if (root === this && !root._activeElement) {
+            this.row.setAttribute('tabindex', '0');
+        }
 
         // if has children, its expandable
         if (!this.hasAttribute('aria-expanded')) {
@@ -142,7 +150,7 @@ export class tree extends HTMLElement {
             if (item.isExpanded()) {
                 next = item.items().at(0);
             }
-            if (!next) next = item.nextElementSibling;
+            if (!next) next = item.nextElementSibling; // todo: only next treeitem
 
             if (!next) {
                 while (item.parentNode) {
@@ -162,7 +170,7 @@ export class tree extends HTMLElement {
     prevFocusable(){
         let item = this;
         while (item) {
-            let next = item.previousElementSibling;
+            let next = item.previousElementSibling; // todo: only next treeitem
             if (next) {
                 if (next.isExpanded()) {
                     next = next.items().at(-1);

@@ -75,7 +75,24 @@
             </u1-tree1>
             <u1-tree1 draggable="true">
                 <u1-ico slot=icon icon=drag_indicator>x</u1-ico>
-                Draggable
+                <label>
+                    Draggable
+                    <input placeholder="same baseline">
+                </label>
+                <button>clickable</button>
+            </u1-tree1>
+
+            <u1-tree1>
+                <input type=checkbox slot=icon id="check1">
+                Checkbox
+                <u1-tree1>
+                    <input type=checkbox slot=icon id="check2">
+                    Checkbox
+                </u1-tree1>
+                <u1-tree1>
+                    <input type=checkbox slot=icon id="check3">
+                    Checkbox
+                </u1-tree1>
             </u1-tree1>
 
         </u1-tree1>
@@ -88,7 +105,7 @@
 
 <section>
 
-    <u1-code element=demo editable trim></u1-code>
+    <u1-code element=demo editable trim> </u1-code>
 
     <u1-code trim editable>
     <style>
@@ -104,6 +121,11 @@
     }
     u1-tree1::part(row):hover {
         background:#00000004;
+    }
+    u1-tree1[aria-grabbed=true] {
+        transition:.2s .2s;
+        opacity:.4;
+        outline-width:0 !important;
     }
     </style>
     </u1-code>
@@ -138,8 +160,6 @@
 
 
 
-
-
 <script type=module>
 /* drag & drop experiment */
 
@@ -167,7 +187,8 @@ const dragAndDropHandler = {
     ondragstart({target, event}) {
         if (target.tagName !== 'U1-TREE1') return;
         dragSrcEl = target;
-        event.dataTransfer.effectAllowed = 'move';
+        dragSrcEl.setAttribute('aria-grabbed', 'true'); // deprecated, but currently the best markup?
+        event.dataTransfer.effectAllowed = 'move'; // needed?
     },
     ondragover({closest, event}) {
         event.preventDefault();
@@ -221,6 +242,7 @@ const dragAndDropHandler = {
     },
     ondragend() {
         dropPositionIndicator.style.display = 'none';
+        dragSrcEl.removeAttribute('aria-grabbed');
         dragSrcEl = null;
     },
     resetExpandTimer(item) {
